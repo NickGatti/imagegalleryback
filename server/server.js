@@ -21,7 +21,7 @@ const upload = multer({
 
 app.post(
   "/upload",
-  upload.single("file" /* name attribute of <file> element in your form */),
+  upload.single("file"),
   (req, res) => {
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, "./uploads/image.png");
@@ -32,17 +32,28 @@ app.post(
 
         const image = fs.readFileSync(path.join(__dirname, './uploads/image.png'))
 
-        fetch('https://www.filestackapi.com/api/store/S3?key=AXMdyQTRfS09C3ad6mSRgz', 
-        {
-          method: "POST",
-          headers: { "Content-Type": "image/png"},
-          body: image
-        }).then(resp => {
-          return resp.json()
-        }).then(resp => {
-          res.json(resp) //The json response from filestack
-        }).catch(console.error)
 
+        // fetch('https://www.filestackapi.com/api/store/S3?key=AXMdyQTRfS09C3ad6mSRgz', 
+        // {
+        //   method: "POST",
+        //   headers: { "Content-Type": "image/png"},
+        //   body: image
+        // }).then(resp => {
+        //   return resp.json()
+        // }).then(resp => {
+        //   console.log('Success!', image)
+        //   res.json(resp) //The json response from filestack
+        // }).catch(console.error)
+
+
+        //
+        //
+        res //DO NOT BLOAT FILESTACK
+          .status(200)
+          .contentType("text/plain")
+          .end("File uploaded!");
+        //
+        // 
       });
     } else {
       fs.unlink(tempPath, err => {

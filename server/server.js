@@ -5,6 +5,10 @@ const multer = require("multer");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const expressUploader = require('express-fileupload');
 
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://nick:Eg3xdOC98f8XwLyf@imageboard.e6qiv9o.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
 const app = express()
 const port = 3000;
 
@@ -33,25 +37,45 @@ app.post(
         const image = fs.readFileSync(path.join(__dirname, './uploads/image.png'))
 
 
-        // fetch('https://www.filestackapi.com/api/store/S3?key=AXMdyQTRfS09C3ad6mSRgz', 
-        // {
-        //   method: "POST",
-        //   headers: { "Content-Type": "image/png"},
-        //   body: image
-        // }).then(resp => {
-        //   return resp.json()
-        // }).then(resp => {
-        //   console.log('Success!', image)
-        //   res.json(resp) //The json response from filestack
-        // }).catch(console.error)
+        fetch('https://www.filestackapi.com/api/store/S3?key=AXMdyQTRfS09C3ad6mSRgz', 
+        {
+          method: "POST",
+          headers: { "Content-Type": "image/png"},
+          body: image
+        }).then(resp => {
+          return resp.json()
+        }).then(resp => {
+          console.log('Filestack Upload Success!', resp)
 
+          client.connect(mongoDBConnectErr => {
+            if (!mongoDBConnectErr) {
+              console.log('Success DB Connect.')
+            } else {
+              console.log('Failure DB Connect.', mongoDBConnectErr)
+            }
+            const collection = client.db("ImageBoard").collection("devices");
+            // perform actions on the collection object
+            collection.insertOne(resp).then(mongoRes => {
+              console.log('Success Mongo Insert:', mongoRes)
+              client.close();
+            }).catch(mongoErr => {
+              console.log('Failure Mongo Insert:', mongoErr)
+              client.close();
+            })
+          });
+
+          res.json(resp) //The json response from filestack
+        }).catch(console.error)
+
+
+        //MongoDB Username: Nick PW: Eg3xdOC98f8XwLyf
 
         //
         //
-        res //DO NOT BLOAT FILESTACK
-          .status(200)
-          .contentType("text/plain")
-          .end("File uploaded!");
+        // res //DO NOT BLOAT FILESTACK
+        //   .status(200)
+        //   .contentType("text/plain")
+        //   .end("File uploaded!");
         //
         // 
       });

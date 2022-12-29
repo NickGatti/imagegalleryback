@@ -4,9 +4,10 @@ const path = require('path');
 const multer = require("multer");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const expressUploader = require('express-fileupload');
+require('dotenv').config()
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://nick:Eg3xdOC98f8XwLyf@imageboard.e6qiv9o.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@${process.env.MONGO_URI}/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 const app = express()
@@ -37,7 +38,7 @@ app.post(
         const image = fs.readFileSync(path.join(__dirname, './uploads/image.png'))
 
 
-        fetch('https://www.filestackapi.com/api/store/S3?key=AXMdyQTRfS09C3ad6mSRgz', 
+        fetch(`https://www.filestackapi.com/api/store/S3?key=${process.env.FILESTACK_KEY}`, 
         {
           method: "POST",
           headers: { "Content-Type": "image/png"},

@@ -12,7 +12,6 @@ module.exports = (app, upload, client, fetch, path, fs, handleError, FILESTACK_K
       
               const image = fs.readFileSync(path.join(__dirname, '../../uploads/image.png'))
       
-      
               fetch(`https://www.filestackapi.com/api/store/S3?key=${FILESTACK_KEY}`, 
               {
                 method: "POST",

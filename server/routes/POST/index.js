@@ -1,4 +1,4 @@
-module.exports = (app, upload, client, fetch, path, fs, handleError, FILESTACK_KEY) => {
+module.exports = (app, upload, collection, fetch, path, fs, handleError, FILESTACK_KEY) => {
     app.post(
         "/upload",
         upload.single("file"),
@@ -21,23 +21,12 @@ module.exports = (app, upload, client, fetch, path, fs, handleError, FILESTACK_K
                 return resp.json()
               }).then(resp => {
                 console.log('Filestack Upload Success!', resp)
-      
-                client.connect(mongoDBConnectErr => {
-                  if (!mongoDBConnectErr) {
-                    console.log('Success DB Connect.')
-                  } else {
-                    console.log('Failure DB Connect.', mongoDBConnectErr)
-                  }
-                  const collection = client.db("ImageBoard").collection("devices");
-
-                  collection.insertOne(resp).then(mongoRes => {
-                    console.log('Success Mongo Insert:', mongoRes)
-                    client.close();
-                  }).catch(mongoErr => {
-                    console.log('Failure Mongo Insert:', mongoErr)
-                    client.close();
-                  })
-                });
+                
+                collection.insertOne(resp).then(mongoRes => {
+                console.log('Success Mongo Insert:', mongoRes)
+                }).catch(mongoErr => {
+                console.log('Failure Mongo Insert:', mongoErr)
+                })
       
                 res.json(resp) //The json response from filestack
               }).catch(console.error)

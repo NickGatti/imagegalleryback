@@ -22,7 +22,17 @@ const upload = multer({
   dest: "./temp"
 });
 
-require('./routes')(app, upload, client, fetch, path, fs, handleError, process.env.FILESTACK_KEY);
+client.connect(mongoDBConnectErr => {
+  if (!mongoDBConnectErr) {
+    console.log('Success DB Connect.')
+  } else {
+    console.log('Failure DB Connect.', mongoDBConnectErr)
+  }
+});
+
+const collection = client.db("ImageBoard").collection("devices");
+
+require('./routes')(app, upload, collection, fetch, path, fs, handleError, process.env.FILESTACK_KEY);
 
 app.use(
   '/',
@@ -33,4 +43,7 @@ app.use(
 
 app.listen(3000, () => {
   console.log(`App running on port 3000`)
+}, () => {
+  console.log('Closing DB Connection...')
+  client.close()
 });

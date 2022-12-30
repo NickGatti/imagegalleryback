@@ -1,4 +1,4 @@
-module.exports = (app, upload, client, fetch, path, fs, handleError, FILESTACK_KEY) => {
-    require('./GET')(app, client)
-    require('./POST')(app, upload, client, fetch, path, fs, handleError, FILESTACK_KEY)
+module.exports = (app, upload, collection, fetch, path, fs, handleError, FILESTACK_KEY) => {
+    require('./GET')(app, collection)
+    require('./POST')(app, upload, collection, fetch, path, fs, handleError, FILESTACK_KEY)
 }

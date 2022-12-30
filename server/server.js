@@ -43,7 +43,4 @@ app.use(
 
 app.listen(3000, () => {
   console.log(`App running on port 3000`)
-}, () => {
-  console.log('Closing DB Connection...')
-  client.close()
 });

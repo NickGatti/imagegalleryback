@@ -36,7 +36,7 @@ require('./routes')(app, upload, collection, fetch, path, fs, handleError, proce
 
 app.use(
   '/',
-  express.static(path.join(__dirname, '../../imagegalleryfront/build'),
+  express.static(path.join(__dirname, '../public'),
   expressUploader()
   )
 );

@@ -17,7 +17,7 @@ const handleError = (err, res) => {
     .contentType("text/plain")
     .end("Oops! Something went wrong!");
 
-  console.error(err)
+  console.error('HandleError line 20:', err)
 };
 
 const upload = multer({
@@ -35,6 +35,12 @@ client.connect(mongoDBConnectErr => {
 const collection = client.db("ImageBoard").collection("devices");
 
 require('./routes')(app, upload, collection, fetch, path, fs, handleError, process.env.FILESTACK_KEY);
+
+app.use(function (req, res, next) {
+  console.log('Time: %d', Date.now())
+  console.log('User join:', req.socket.remoteAddress)
+  next()
+});
 
 app.use(
   '/',

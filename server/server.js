@@ -16,6 +16,8 @@ const handleError = (err, res) => {
     .status(500)
     .contentType("text/plain")
     .end("Oops! Something went wrong!");
+
+  console.error(err)
 };
 
 const upload = multer({

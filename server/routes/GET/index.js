@@ -3,10 +3,10 @@ module.exports = (app, collection) => {
         const allImages = collection.find();
         const response = [];
         await allImages.forEach(pic => response.push(pic));
-        
+
         res.json({ images: response });
     }),
-    app.get('/image', (req, res) => {
-        res.json({ url: 'sample url' });
-    })
+        app.get('/image', (req, res) => {
+            res.json({ url: 'sample url' });
+        })
 };

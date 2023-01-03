@@ -3,7 +3,7 @@ const app = express();
 const fs = require("fs");
 const path = require('path');
 const multer = require("multer");
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const expressUploader = require('express-fileupload');
 require('dotenv').config();
 
@@ -45,7 +45,7 @@ app.use(function (req, res, next) {
 app.use(
   '/',
   express.static(path.join(__dirname, '../public'),
-  expressUploader()
+    expressUploader()
   )
 );
 

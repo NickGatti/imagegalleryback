@@ -10,7 +10,7 @@ module.exports = (app, upload, collection, fetch, path, fs, handleError, FILESTA
             fs.rename(tempPath, targetPath, err => {
               if (err) return handleError(err, res);
       
-              const image = fs.readFileSync(path.join(__dirname, '../../uploads/image.png'))
+              const image = fs.readFileSync(path.join(__dirname, '../../uploads/image.png'));
       
               fetch(`https://www.filestackapi.com/api/store/S3?key=${FILESTACK_KEY}`, 
               {
@@ -20,16 +20,18 @@ module.exports = (app, upload, collection, fetch, path, fs, handleError, FILESTA
               }).then(resp => {
                 return resp.json()
               }).then(resp => {
-                console.log('Filestack Upload Success!', resp)
+                console.log('Filestack Upload Success!', resp);
                 
                 collection.insertOne(resp).then(mongoRes => {
-                console.log('Success Mongo Insert:', mongoRes)
+                console.log('Success Mongo Insert:', mongoRes);
                 }).catch(mongoErr => {
-                console.log('Failure Mongo Insert:', mongoErr)
+                console.log('Failure Mongo Insert:', mongoErr);
                 })
       
-                res.json(resp) //The json response from filestack
-              }).catch(console.error)
+                res.json(resp); //The json response from filestack
+              }).catch(err => {
+                console.log('Error POST /images', err);
+              });
             });
           } else {
             fs.unlink(tempPath, err => {
@@ -43,4 +45,4 @@ module.exports = (app, upload, collection, fetch, path, fs, handleError, FILESTA
           }
         }
       );
-}
+};

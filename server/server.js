@@ -17,7 +17,7 @@ const handleError = (err, res) => {
     .contentType("text/plain")
     .end("Oops! Something went wrong!");
 
-  console.error('HandleError line 20:', err)
+  console.error('HandleError line 20:', err);
 };
 
 const upload = multer({
@@ -26,9 +26,9 @@ const upload = multer({
 
 client.connect(mongoDBConnectErr => {
   if (!mongoDBConnectErr) {
-    console.log('Success DB Connect.')
+    console.log('Success DB Connect.');
   } else {
-    console.log('Failure DB Connect.', mongoDBConnectErr)
+    console.log('Failure DB Connect.', mongoDBConnectErr);
   }
 });
 
@@ -37,9 +37,9 @@ const collection = client.db("ImageBoard").collection("devices");
 require('./routes')(app, upload, collection, fetch, path, fs, handleError, process.env.FILESTACK_KEY);
 
 app.use(function (req, res, next) {
-  console.log('Time: %d', Date.now())
-  console.log('User join:', req.socket.remoteAddress)
-  next()
+  console.log('Time: %d', Date.now());
+  console.log('User join:', req.socket.remoteAddress);
+  next();
 });
 
 app.use(
@@ -50,5 +50,5 @@ app.use(
 );
 
 app.listen(80, () => {
-  console.log(`App running on port 80`)
+  console.log(`App running on port 80`);
 });

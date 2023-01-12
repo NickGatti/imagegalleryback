@@ -3,6 +3,10 @@ module.exports = (app, upload, collection, fetch, path, fs, handleError, FILESTA
     "/upload",
     upload.single("file"),
     (req, res) => {
+      if (!req.file) {
+        console.log('File undefined.')
+        return
+      }
       const tempPath = req.file.path;
       const targetPath = path.join(__dirname, "../../uploads/image.png");
 

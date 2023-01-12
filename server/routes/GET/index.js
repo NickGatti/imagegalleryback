@@ -6,7 +6,7 @@ module.exports = (app, collection) => {
 
         res.json({ images: response });
     }),
-        app.get('/image', (req, res) => {
-            res.json({ url: 'sample url' });
-        })
+    app.get('/image', (req, res) => {
+        res.json({ url: 'sample url' });
+    })
 };
